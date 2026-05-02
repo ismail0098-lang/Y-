@@ -8,66 +8,74 @@ hex_data = [
     "BE 82 00",       # [0] MOV SI, 82h (DOS CmdLine)
     "BF 00 10",       # [3] MOV DI, 1000h (Output buffer)
     
-    # --- [main_loop] ---
+    "main_loop:",
     "AC",             # [6] LODSB
-    "3C 00", "74 54", # [7] CMP AL, 0; JZ exit
+    "3C 00", "74 60", # [7] CMP AL, 0; JZ exit
     
+    # --- [=] Handle Assignment & Addition: a = b + 1; ---
+    "3C 61", "72 20", # [11] CMP AL, 'a'; JB check_pointer
+    "E8 40 00",       # [15] CALL get_offset (DX = target var)
+    "89 DA",          # [18] MOV DX, BX
+    "AC", "AC",       # [20] LODSB (=), LODSB (first operand)
+    "E8 38 00",       # [22] CALL get_offset (Get value of b)
+    "8A 07",          # [25] MOV AL, [BX]
+    "AC",             # [27] Check for '+'
+    "3C 2B", "75 04", # [28] CMP AL, '+'; JNZ store
+    "AC", "02 07",    # [32] LODSB (second operand), ADD AL, [BX]
+    
+    "store:",
+    "B0 88", "AA",    # [36] Emit: MOV [target], AL
+    "89 D0", "AB",    # [40] Emit target address
+    "EB CD",          # [42] JMP main_loop
+
     # --- [*] Pointer Write: *d = v; ---
-    "3C 2A",          # [11] CMP AL, '*'
-    "75 0E",          # [13] JNZ check_print
-    "AC", "E8 34 00", # [15] LODSB (d), CALL get_offset (Offset: 17+34=4B/75)
-    "8B 1F",          # [18] MOV BX, [BX] (Get address)
-    "AC", "AC",       # [20] LODSB (=), LODSB (v)
-    "E8 2C 00",       # [22] CALL get_offset
-    "B0 88", "AA",    # [25] Emit: MOV [BX], AL (88 07)
-    "B0 07", "AA",    # [29]
-    "EB D2",          # [31] JMP main_loop
+    "check_pointer:",
+    "3C 2A",          # [44] CMP AL, '*'
+    "75 0E",          # [46] JNZ check_print
+    "AC", "E8 20 00", # [48] LODSB (d), CALL get_offset
+    "8B 1F",          # [51] MOV BX, [BX] (Get address)
+    "AC", "AC",       # [53] LODSB (=), LODSB (v)
+    "E8 18 00",       # [55] CALL get_offset
+    "B0 88", "AA",    # [58] Emit: MOV [BX], AL
+    "B0 07", "AA",    # [62]
+    "EB C0",          # [64] JMP main_loop
 
     # --- [p] Handle Print: p x; ---
     "check_print:",
-    "3C 70",          # [33] CMP AL, 'p'
-    "75 0C",          # [35] JNZ check_while
-    "AC", "AC",       # [37] LODSB (space), LODSB (var)
-    "E8 20 00",       # [39] CALL get_offset
-    "B0 B4", "AA",    # [42] Emit: MOV AH, 02
-    "B0 02", "AA",    # [46]
-    "B0 8A", "AA",    # [48] Emit: MOV DL, [BX]
-    "B0 17", "AA",    # [52]
-    "B0 CD", "AA",    # [54] Emit: INT 21h
-    "B0 21", "AA",    # [58]
-    "EB BC",          # [60] JMP main_loop
+    "3C 70",          # [66] CMP AL, 'p'
+    "75 0C",          # [68] JNZ check_while
+    "AC", "AC",       # [70] LODSB (space), LODSB (var)
+    "E8 0C 00",       # [72] CALL get_offset
+    "B0 B4", "AA",    # [75] Emit: MOV AH, 02
+    "B0 02", "AA",    # [79]
+    "B0 8A", "AA",    # [81] Emit: MOV DL, [BX]
+    "B0 17", "AA",    # [85]
+    "B0 CD", "AA",    # [87] Emit: INT 21h
+    "B0 21", "AA",    # [91]
+    "EB A3",          # [93] JMP main_loop
 
     # --- [w] Handle While: w(x){ ---
     "check_while:",
-    "3C 77",          # [62] CMP AL, 'w'
-    "75 0C",          # [64] JNZ check_exit
-    "AC", "AC",       # [66] LODSB (skip '('), LODSB (get var)
-    "E8 07 00",       # [68] CALL get_offset
-    "57",             # [71] PUSH DI (Save for patch)
-    "B0 83", "AA",    # [72] Emit: CMP [BX], 0
-    "B0 3E", "AA",    # [76]
-    "B0 74", "AA",    # [78] Emit: JZ
-    "47",             # [82] INC DI
-    "EB A7",          # [83] JMP main_loop
+    "3C 77",          # [95] CMP AL, 'w'
+    "75 0C",          # [97] JNZ exit
+    "AC", "AC",       # [99] LODSB (skip '('), LODSB (get var)
+    "E8 F0 FF",       # [101] CALL get_offset (Relative back)
+    "57",             # [104] PUSH DI
+    "B0 83", "AA",    # [105] Emit: CMP [BX], 0
+    "B0 3E", "AA",    # [109]
+    "B0 74", "AA",    # [111] Emit: JZ
+    "47",             # [115] INC DI
+    "EB 86",          # [116] JMP main_loop
 
     # --- [get_offset] Helper ---
     "get_offset:",
-    "2C 61",          # [85] SUB AL, 'a'
-    "D1 E0",          # [87] SHL AX, 1
-    "8B D8",          # [89] MOV BX, AX
-    "C3",             # [91] RET
+    "2C 61",          # [118] SUB AL, 'a'
+    "D1 E0",          # [120] SHL AX, 1
+    "8B D8",          # [122] MOV BX, AX
+    "C3",             # [124] RET
 
-    "check_exit:",
-    "3C 7D",          # [92] CMP AL, '}'
-    "75 08",          # [94] JNZ done
-    "5B",             # [96] POP BX (Get JZ location)
-    "89 F8",          # [97] MOV AX, DI
-    "29 D8",          # [99] SUB AX, BX
-    "88 07",          # [101] MOV [BX], AL (PATCH!)
-    "EB 95",          # [103] JMP main_loop
-    
     "exit:",
-    "CD 20"           # [105] INT 20h
+    "CD 20"           # [125] INT 20h
 ]
 
 def build():

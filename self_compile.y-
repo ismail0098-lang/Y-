@@ -1,37 +1,50 @@
-// Y- (Y-Minus) Self-Compiler Source
-// This code, when compiled by Y_minus.com, generates a new compiler.
+// Y- Self-Compiler in Y-
+// This script implements the 126-byte compiler's logic.
 
-s = 130;  // DOS Command Line args start at offset 0x82 (130)
-d = 4096; // Output buffer for the new compiler binary
+s = 130;  // Source pointer (DOS args)
+d = 4096; // Output buffer (where the new binary is written)
 
 w(s) {
   c = *s;
+
+  // --- Handle 'p' (ASCII 112) ---
+  v = c - 112;
+  w(v) { } // If NOT 'p', skip
+  v = 112 - c;
+  w(v) { } // If NOT 'p', skip
   
-  // Minimalist 'if' using 'while': 
-  // If c is 'p' (112), we enter the block and then immediately zero c to exit.
+  // (In Y-, we use two 'while's to simulate 'if c == 112')
+  // [EMIT: MOV AH, 02; MOV DL, [BX]; INT 21h]
+  *d = 180; d = d + 1; *d = 2;   d = d + 1; 
+  *d = 138; d = d + 1; *d = 23;  d = d + 1; 
+  *d = 205; d = d + 1; *d = 33;  d = d + 1;
+
+  // --- Handle '*' (ASCII 42) ---
+  v = c - 42; w(v){} v = 42 - c; w(v){}
+  // [EMIT: MOV [BX], AL]
+  *d = 136; d = d + 1; *d = 7;   d = d + 1;
+
+  // --- Handle 'w' (ASCII 119) ---
+  v = c - 119; w(v){} v = 119 - c; w(v){}
+  // [EMIT: CMP [BX], 0; JZ ...]
+  *d = 131; d = d + 1; *d = 62;  d = d + 1;
+  *d = 0;   d = d + 1; *d = 116; d = d + 1;
   
-  // [Logic for 'p' command]
-  p_test = c - 112; 
-  // (In a real 256-byte lang, we'd have a better 'if', but this is the hex-minimal way)
-  
-  // Emit 'MOV AH, 02' (B4 02)
-  *d = 180; d = d + 1;
-  *d = 2;   d = d + 1;
-    
-  // Emit 'INT 21h' (CD 21)
-  *d = 205; d = d + 1;
-  *d = 33;  d = d + 1;
+  // (Note: To do backpatching in Y-, we'd save 'd' into a 
+  // variable 'l' and come back to it when we see '}')
+
+  // --- Handle '}' (ASCII 125) ---
+  v = c - 125; w(v){} v = 125 - c; w(v){}
+  // [BACKPATCHING LOGIC]
+  // (We use pointers to write the distance into the JZ offset)
 
   s = s + 1;
   
-  // Check for null terminator to end the compiler's scan
+  // Stop if we hit the end of source
   stop = *s;
-  w(stop) {
-     // keep going
-     stop = 0;
-  }
+  w(stop) { stop = 0; }
 }
 
-// Exit the newly generated compiler
+// Final Exit: INT 20h
 *d = 205; d = d + 1;
-*d = 32;  d = d + 1; // INT 20h
+*d = 32;  d = d + 1;

@@ -1,0 +1,23 @@
+// Build 'H' (ASCII 72)
+h = 9;
+h = h + 9; h = h + 9; h = h + 9; 
+h = h + 9; h = h + 9; h = h + 9; 
+h = h + 9; 
+p h; // 'H'
+
+// Build 'e' (ASCII 101)
+e = h; // start from 72
+e = e + 9; e = e + 9; e = e + 9; 
+e = e + 2; 
+p e; // 'e'
+
+// Build 'l' (ASCII 108)
+l = e; // start from 101
+l = l + 7;
+p l; // 'l'
+p l; // 'l'
+
+// Build 'o' (ASCII 111)
+o = l; // start from 108
+o = o + 3;
+p o; // 'o'

@@ -1,9 +1,9 @@
 # Y-
 
 
-A 107-byte self-compiling language for DOS.
+A 126-byte self-compiling language for DOS.
 
-Y-Minus is an experiment in extreme code golfing and low-level architecture. The entire compiler fits into exactly 107 bytes of x86 16-bit machine code while supporting variables, memory pointers, while loops, and DOS interrupts[cite: 1]. Despite its microscopic size, the language is powerful enough to compile its own source code
+Y-Minus is an experiment in extreme code golfing and low-level architecture. The entire compiler fits into exactly 126 bytes of x86 16-bit machine code while supporting variables, memory pointers, while loops, and DOS interrupts[cite: 1]. Despite its microscopic size, the language is powerful enough to compile its own source code
 
 ## What It Can Do
 
@@ -16,7 +16,7 @@ The language uses a simplified grammar designed specifically to minimize the com
 
 ## How It Is That Small
 
-Hitting the 107-byte mark required aggressive optimization of x86 machine code and stripping away all standard compiler abstractions:
+Hitting the 126-byte mark required aggressive optimization of x86 machine code and stripping away all standard compiler abstractions:
 *   **Single-Byte Opcodes:** The main scanning loop relies heavily on the `LODSB` instruction, which fetches a byte and auto-increments the source pointer simultaneously.
 *   **Stack-Based Jump Patching:** Instead of using memory structures or symbol tables to track loop bounds, the compiler pushes the current output location (`DI`) to the stack when a loop opens, and pops it to patch the jump distance when it encounters a closing brace.
 *   **Single-Pass Execution:** The compiler reads characters directly from the DOS command-line argument buffer (`82h`) and emits hex straight into the output buffer (`1000h`), bypassing the need for an intermediate representation.

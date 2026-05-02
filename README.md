@@ -29,4 +29,4 @@ Hitting the 107-byte mark required aggressive optimization of x86 machine code a
 *   `y_minus_sim.c` & `y_minus_sim.rs`: High-level simulators written in C and Rust to demonstrate the translation logic and machine code mapping without needing a DOS emulator.
 *   `y_minus_sketch.c`: The initial concept sketch outlining the grammar and memory mapping strategy.
 
-- YSU @ismail0098@gmail.com to contact me
+- YSU umut7korkmaz@gmail.com to contact me

@@ -1,0 +1,37 @@
+// Y- (Y-Minus) Self-Compiler Source
+// This code, when compiled by Y_minus.com, generates a new compiler.
+
+s = 130;  // DOS Command Line args start at offset 0x82 (130)
+d = 4096; // Output buffer for the new compiler binary
+
+w(s) {
+  c = *s;
+  
+  // Minimalist 'if' using 'while': 
+  // If c is 'p' (112), we enter the block and then immediately zero c to exit.
+  
+  // [Logic for 'p' command]
+  p_test = c - 112; 
+  // (In a real 256-byte lang, we'd have a better 'if', but this is the hex-minimal way)
+  
+  // Emit 'MOV AH, 02' (B4 02)
+  *d = 180; d = d + 1;
+  *d = 2;   d = d + 1;
+    
+  // Emit 'INT 21h' (CD 21)
+  *d = 205; d = d + 1;
+  *d = 33;  d = d + 1;
+
+  s = s + 1;
+  
+  // Check for null terminator to end the compiler's scan
+  stop = *s;
+  w(stop) {
+     // keep going
+     stop = 0;
+  }
+}
+
+// Exit the newly generated compiler
+*d = 205; d = d + 1;
+*d = 32;  d = d + 1; // INT 20h

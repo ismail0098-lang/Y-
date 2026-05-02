@@ -1,5 +1,5 @@
 # Y-
-# Y-Minus (Y-)
+
 
 A 107-byte self-compiling language for DOS.
 

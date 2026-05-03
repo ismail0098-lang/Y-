@@ -20,7 +20,7 @@ Hitting the 126-byte mark required aggressive optimization of x86 machine code a
 *   **Single-Byte Opcodes:** The main scanning loop relies heavily on the `LODSB` instruction, which fetches a byte and auto-increments the source pointer simultaneously.
 *   **Stack-Based Jump Patching:** Instead of using memory structures or symbol tables to track loop bounds, the compiler pushes the current output location (`DI`) to the stack when a loop opens, and pops it to patch the jump distance when it encounters a closing brace.
 *   **Single-Pass Execution:** The compiler reads characters directly from the DOS command-line argument buffer (`82h`) and emits hex straight into the output buffer (`1000h`), bypassing the need for an intermediate representation.
-*   **Bare-Metal Address Resolution:** Variable memory offsets are calculated on the fly by subtracting the ASCII value of 'a' from the input character and bit-shifting the register[cite: 1].
+*   **Bare-Metal Address Resolution:** Variable memory offsets are calculated on the fly by subtracting the ASCII value of 'a' from the input character and bit-shifting the register.
 
 ## Repository Contents
 

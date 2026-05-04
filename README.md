@@ -2,11 +2,6 @@
 
 A 126-byte self-compiling language for DOS.
 
-<p align="center">
-  <img src="Y_minus_QR.png" width="300" alt="Y-Minus Compiler QR Code">
-  <br>
-  <i>In fact the compiler was soo small i could make it a QR code to scan. However i dont recommend people scanning random QR on the internet  so its up to you.</i>
-</p>
 
 Y-Minus is an experiment in extreme code golfing and low-level architecture. The entire compiler fits into exactly 126 bytes of x86 16-bit machine code while supporting variables, memory pointers, while loops, and DOS interrupts. Despite its microscopic size, the language is powerful enough to compile its own source code.
 
@@ -33,6 +28,14 @@ Hitting the 126-byte mark required aggressive optimization of x86 machine code a
 * `self_compile.y-`: The source code for the compiler, written entirely in Y-Minus.
 * `y_minus_sim.c` & `y_minus_sim.rs`: High-level simulators written in C and Rust to demonstrate the translation logic and machine code mapping without needing a DOS emulator.
 * `y_minus_sketch.c`: The initial concept sketch outlining the grammar and memory mapping strategy.
+
+  
+<p align="center">
+  <img src="Y_minus_QR.png" width="300" alt="Y-Minus Compiler QR Code">
+  <br>
+  <i>In fact the compiler was soo small i could make it a QR code to scan. However i dont recommend people scanning random QR on the internet  so its up to you.</i>
+</p>
+
 
 ---
 **Contact:** YSU - umut7korkmaz@gmail.com

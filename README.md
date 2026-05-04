@@ -33,9 +33,9 @@ Hitting the 126-byte mark required aggressive optimization of x86 machine code a
 <p align="center">
   <img src="Y_minus_QR.png" width="300" alt="Y-Minus Compiler QR Code">
   <br>
-  <i>In fact the compiler was soo small i could make it a QR code to scan. However i dont recommend people scanning random QR on the internet  so its up to you.</i>
+  <i>In fact the compiler was soo small i could make it a QR code to scan. However i dont recommend people scanning random QR codes on the internet  so its up to you.</i>
 </p>
 
-
+Best Regards!
 ---
 **Contact:** YSU - umut7korkmaz@gmail.com

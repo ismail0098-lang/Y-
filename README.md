@@ -3,7 +3,7 @@
 
 A 126-byte self-compiling language for DOS.
 
-Y-Minus is an experiment in extreme code golfing and low-level architecture. The entire compiler fits into exactly 126 bytes of x86 16-bit machine code while supporting variables, memory pointers, while loops, and DOS interrupts[cite: 1]. Despite its microscopic size, the language is powerful enough to compile its own source code
+Y-Minus is an experiment in extreme code golfing and low-level architecture. The entire compiler fits into exactly 126 bytes of x86 16-bit machine code while supporting variables, memory pointers, while loops, and DOS interrupts. Despite its microscopic size, the language is powerful enough to compile its own source code
 
 ## What It Can Do
 
